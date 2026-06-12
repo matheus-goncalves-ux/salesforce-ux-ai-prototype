@@ -13,6 +13,10 @@ import Home from 'page/home';
 import IconTest from 'page/iconTest';
 import Contacts from 'page/contacts';
 import ContactDetail from 'page/contactDetail';
+import Leads from 'page/leads';
+import LeadDetail from 'page/leadDetail';
+import Campaigns from 'page/campaigns';
+import CampaignDetail from 'page/campaignDetail';
 import Builder from 'page/builder';
 import NotFound from 'page/notFound';
 
@@ -22,6 +26,10 @@ const ROUTE_COMPONENTS = {
     'page-icon-test': IconTest,
     'page-contacts': Contacts,
     'page-contact-detail': ContactDetail,
+    'page-leads': Leads,
+    'page-lead-detail': LeadDetail,
+    'page-campaigns': Campaigns,
+    'page-campaign-detail': CampaignDetail,
     'page-builder': Builder,
 };
 

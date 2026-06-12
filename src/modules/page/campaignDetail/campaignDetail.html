@@ -1,0 +1,406 @@
+<template>
+    <div class="slds-p-horizontal_medium">
+        <template lwc:if={hasCampaign}>
+            <!-- Record header -->
+            <ui-page-header
+                variant="record-home"
+                icon-name="standard:campaign"
+                object-label="Campaign"
+                title={campaignName}
+                fields={summaryFields}>
+                <div slot="actions">
+                    <div class="slds-page-header__controls">
+                        <div class="slds-page-header__control">
+                            <lightning-button
+                                label={followLabel}
+                                variant={followVariant}
+                                icon-name={followIconName}
+                                onclick={handleFollow}>
+                            </lightning-button>
+                        </div>
+                        <div class="slds-page-header__control">
+                            <lightning-button-group>
+                                <lightning-button label="Edit" variant="neutral"></lightning-button>
+                                <lightning-button label="Manage Members" variant="neutral"></lightning-button>
+                                <lightning-button label="Clone" variant="neutral"></lightning-button>
+                                <lightning-button-menu
+                                    alternative-text="More Actions"
+                                    variant="border-filled"
+                                    icon-size="medium"
+                                    menu-alignment="right">
+                                    <lightning-menu-item label="Advanced Setup" value="advanced_setup"></lightning-menu-item>
+                                    <lightning-menu-item label="Add Campaign Members" value="add_members"></lightning-menu-item>
+                                    <lightning-menu-item label="Send List Email" value="send_list_email"></lightning-menu-item>
+                                    <lightning-menu-item label="Delete" value="delete"></lightning-menu-item>
+                                </lightning-button-menu>
+                            </lightning-button-group>
+                        </div>
+                    </div>
+                </div>
+            </ui-page-header>
+
+            <!-- Body: two-column grid (left 8/12, right 4/12) -->
+            <div class="slds-grid slds-gutters slds-m-top_medium">
+                <!-- LEFT COLUMN: Single shell with Related/Details tabs and the
+                     related-list cards stacked inside the active tab. -->
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_8-of-12">
+
+                    <article class="c-campaign-detail__related-shell">
+                        <lightning-tabset class="c-campaign-detail__tabset">
+
+                            <!-- ============ RELATED TAB ============ -->
+                            <lightning-tab label="Related">
+                                <!-- Campaign Members card -->
+                                <article class="c-campaign-detail__card c-campaign-detail__card_first">
+                                    <header class="c-campaign-detail__card-header">
+                                        <div class="c-campaign-detail__card-title">
+                                            <span class="c-campaign-detail__card-icon">
+                                                <lightning-icon
+                                                    icon-name="standard:campaign_members"
+                                                    size="small"
+                                                    alternative-text="Campaign Members">
+                                                </lightning-icon>
+                                            </span>
+                                            <h2 class="c-campaign-detail__card-heading">
+                                                <a href="#">{membersCardTitle}</a>
+                                            </h2>
+                                        </div>
+                                        <div class="c-campaign-detail__card-actions">
+                                            <lightning-button-group>
+                                                <lightning-button label="Add Leads" variant="neutral"></lightning-button>
+                                                <lightning-button label="Add Contacts" variant="neutral"></lightning-button>
+                                                <lightning-button-menu
+                                                    alternative-text="More Member Actions"
+                                                    variant="border-filled"
+                                                    icon-size="small"
+                                                    menu-alignment="right">
+                                                    <lightning-menu-item label="Import from File" value="import"></lightning-menu-item>
+                                                    <lightning-menu-item label="Update Status" value="update_status"></lightning-menu-item>
+                                                    <lightning-menu-item label="Remove" value="remove"></lightning-menu-item>
+                                                </lightning-button-menu>
+                                            </lightning-button-group>
+                                        </div>
+                                    </header>
+                                    <template lwc:if={hasMembers}>
+                                        <div class="c-campaign-detail__table-wrap">
+                                            <table class="slds-table slds-table_cell-buffer slds-table_bordered c-campaign-detail__table">
+                                                <thead>
+                                                    <tr class="slds-line-height_reset">
+                                                        <th class="slds-text-title_caps" scope="col"><div class="slds-truncate" title="Type">Type</div></th>
+                                                        <th class="slds-text-title_caps" scope="col"><div class="slds-truncate" title="First Name">First Name</div></th>
+                                                        <th class="slds-text-title_caps" scope="col"><div class="slds-truncate" title="Last Name">Last Name</div></th>
+                                                        <th class="slds-text-title_caps" scope="col"><div class="slds-truncate" title="Role">Role</div></th>
+                                                        <th scope="col" class="c-campaign-detail__row-actions-col">
+                                                            <span class="slds-assistive-text">Actions</span>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <template for:each={members} for:item="row">
+                                                        <tr key={row.rowKey} class="slds-hint-parent">
+                                                            <th scope="row" data-label="Type"><div class="slds-truncate" title={row.type}>{row.type}</div></th>
+                                                            <td data-label="First Name"><div class="slds-truncate" title={row.firstName}>{row.firstName}</div></td>
+                                                            <td data-label="Last Name"><div class="slds-truncate" title={row.lastName}>{row.lastName}</div></td>
+                                                            <td data-label="Role"><div class="slds-truncate" title={row.role}>{row.role}</div></td>
+                                                            <td class="c-campaign-detail__row-actions-cell">
+                                                                <lightning-button-icon
+                                                                    icon-name="utility:down"
+                                                                    variant="bare"
+                                                                    size="x-small"
+                                                                    alternative-text="Show row actions"
+                                                                    title="Show actions">
+                                                                </lightning-button-icon>
+                                                            </td>
+                                                        </tr>
+                                                    </template>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </template>
+                                    <footer class="c-campaign-detail__card-footer">
+                                        <a href="#">View All</a>
+                                    </footer>
+                                </article>
+
+                                <!-- Commercial Policies card -->
+                                <article class="c-campaign-detail__card">
+                                    <header class="c-campaign-detail__card-header">
+                                        <div class="c-campaign-detail__card-title">
+                                            <span class="c-campaign-detail__card-icon">
+                                                <lightning-icon
+                                                    icon-name="standard:product_consumed_state"
+                                                    size="small"
+                                                    alternative-text="Commercial Policies">
+                                                </lightning-icon>
+                                            </span>
+                                            <h2 class="c-campaign-detail__card-heading">
+                                                <a href="#">{commercialPoliciesCardTitle}</a>
+                                            </h2>
+                                        </div>
+                                        <div class="c-campaign-detail__card-actions">
+                                            <lightning-button-group>
+                                                <lightning-button label="Add Policies" variant="neutral"></lightning-button>
+                                                <lightning-button-menu
+                                                    alternative-text="More Policy Actions"
+                                                    variant="border-filled"
+                                                    icon-size="small"
+                                                    menu-alignment="right">
+                                                    <lightning-menu-item label="Refresh" value="refresh"></lightning-menu-item>
+                                                    <lightning-menu-item label="Export" value="export"></lightning-menu-item>
+                                                </lightning-button-menu>
+                                            </lightning-button-group>
+                                        </div>
+                                    </header>
+                                    <template lwc:if={hasCommercialPolicies}>
+                                        <div class="c-campaign-detail__table-wrap">
+                                            <table class="slds-table slds-table_cell-buffer slds-table_bordered c-campaign-detail__table">
+                                                <thead>
+                                                    <tr class="slds-line-height_reset">
+                                                        <th class="slds-text-title_caps" scope="col"><div class="slds-truncate" title="Policy">Policy</div></th>
+                                                        <th class="slds-text-title_caps" scope="col"><div class="slds-truncate" title="Category">Category</div></th>
+                                                        <th class="slds-text-title_caps" scope="col"><div class="slds-truncate" title="Validity">Validity</div></th>
+                                                        <th class="slds-text-title_caps" scope="col"><div class="slds-truncate" title="Condition">Condition</div></th>
+                                                        <th scope="col" class="c-campaign-detail__row-actions-col">
+                                                            <span class="slds-assistive-text">Actions</span>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <template for:each={commercialPolicies} for:item="row">
+                                                        <tr key={row.rowKey} class="slds-hint-parent">
+                                                            <th scope="row" data-label="Policy"><div class="slds-truncate" title={row.policy}><a href="#">{row.policy}</a></div></th>
+                                                            <td data-label="Category"><div class="slds-truncate" title={row.category}>{row.category}</div></td>
+                                                            <td data-label="Validity"><div class="slds-truncate" title={row.validity}>{row.validity}</div></td>
+                                                            <td data-label="Condition"><div class="slds-truncate" title={row.condition}>{row.condition}</div></td>
+                                                            <td class="c-campaign-detail__row-actions-cell">
+                                                                <lightning-button-icon
+                                                                    icon-name="utility:down"
+                                                                    variant="bare"
+                                                                    size="x-small"
+                                                                    alternative-text="Show row actions"
+                                                                    title="Show actions">
+                                                                </lightning-button-icon>
+                                                            </td>
+                                                        </tr>
+                                                    </template>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </template>
+                                    <footer class="c-campaign-detail__card-footer">
+                                        <a href="#">View All</a>
+                                    </footer>
+                                </article>
+
+                                <!-- Mechanics card -->
+                                <article class="c-campaign-detail__card">
+                                    <header class="c-campaign-detail__card-header">
+                                        <div class="c-campaign-detail__card-title">
+                                            <span class="c-campaign-detail__card-icon">
+                                                <lightning-icon
+                                                    icon-name="standard:settings"
+                                                    size="small"
+                                                    alternative-text="Mechanics">
+                                                </lightning-icon>
+                                            </span>
+                                            <h2 class="c-campaign-detail__card-heading">
+                                                <a href="#">{mechanicsCardTitle}</a>
+                                            </h2>
+                                        </div>
+                                        <div class="c-campaign-detail__card-actions">
+                                            <lightning-button-group>
+                                                <lightning-button label="Add Policies" variant="neutral"></lightning-button>
+                                                <lightning-button-menu
+                                                    alternative-text="More Mechanic Actions"
+                                                    variant="border-filled"
+                                                    icon-size="small"
+                                                    menu-alignment="right">
+                                                    <lightning-menu-item label="Refresh" value="refresh"></lightning-menu-item>
+                                                    <lightning-menu-item label="Reorder" value="reorder"></lightning-menu-item>
+                                                </lightning-button-menu>
+                                            </lightning-button-group>
+                                        </div>
+                                    </header>
+                                    <template lwc:if={hasMechanics}>
+                                        <div class="c-campaign-detail__table-wrap">
+                                            <table class="slds-table slds-table_cell-buffer slds-table_bordered c-campaign-detail__table">
+                                                <thead>
+                                                    <tr class="slds-line-height_reset">
+                                                        <th class="slds-text-title_caps" scope="col"><div class="slds-truncate" title="Rule">Rule</div></th>
+                                                        <th class="slds-text-title_caps" scope="col"><div class="slds-truncate" title="Criteria">Criteria</div></th>
+                                                        <th class="slds-text-title_caps" scope="col"><div class="slds-truncate" title="Application">Application</div></th>
+                                                        <th class="slds-text-title_caps" scope="col"><div class="slds-truncate" title="Notes">Notes</div></th>
+                                                        <th scope="col" class="c-campaign-detail__row-actions-col">
+                                                            <span class="slds-assistive-text">Actions</span>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <template for:each={mechanics} for:item="row">
+                                                        <tr key={row.rowKey} class="slds-hint-parent">
+                                                            <th scope="row" data-label="Rule"><div class="slds-truncate" title={row.rule}><a href="#">{row.rule}</a></div></th>
+                                                            <td data-label="Criteria"><div class="slds-truncate" title={row.criteria}>{row.criteria}</div></td>
+                                                            <td data-label="Application"><div class="slds-truncate" title={row.application}>{row.application}</div></td>
+                                                            <td data-label="Notes"><div class="slds-truncate" title={row.notes}>{row.notes}</div></td>
+                                                            <td class="c-campaign-detail__row-actions-cell">
+                                                                <lightning-button-icon
+                                                                    icon-name="utility:down"
+                                                                    variant="bare"
+                                                                    size="x-small"
+                                                                    alternative-text="Show row actions"
+                                                                    title="Show actions">
+                                                                </lightning-button-icon>
+                                                            </td>
+                                                        </tr>
+                                                    </template>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </template>
+                                    <footer class="c-campaign-detail__card-footer">
+                                        <a href="#">View All</a>
+                                    </footer>
+                                </article>
+
+                                <!-- Files card (empty upload state) -->
+                                <article class="c-campaign-detail__card">
+                                    <header class="c-campaign-detail__card-header">
+                                        <div class="c-campaign-detail__card-title">
+                                            <span class="c-campaign-detail__card-icon c-campaign-detail__card-icon_muted">
+                                                <lightning-icon
+                                                    icon-name="doctype:attachment"
+                                                    size="small"
+                                                    alternative-text="Files">
+                                                </lightning-icon>
+                                            </span>
+                                            <h2 class="c-campaign-detail__card-heading">
+                                                <a href="#">{filesCardTitle}</a>
+                                            </h2>
+                                        </div>
+                                        <div class="c-campaign-detail__card-actions">
+                                            <lightning-button label="Add Files" variant="neutral"></lightning-button>
+                                        </div>
+                                    </header>
+                                    <div class="c-campaign-detail__file-drop">
+                                        <lightning-icon
+                                            icon-name="utility:upload"
+                                            size="small"
+                                            alternative-text="Upload">
+                                        </lightning-icon>
+                                        <lightning-button
+                                            label="Upload Files"
+                                            variant="neutral"
+                                            class="c-campaign-detail__file-button">
+                                        </lightning-button>
+                                        <p class="c-campaign-detail__file-helper">Or drop files</p>
+                                    </div>
+                                </article>
+                            </lightning-tab>
+
+                            <!-- ============ DETAILS TAB ============ -->
+                            <lightning-tab label="Details">
+                                <div class="c-campaign-detail__details-body">
+                                    <template for:each={detailSections} for:item="section">
+                                        <div key={section.id} class={section.sectionClass}>
+                                            <h3 class="slds-section__title">
+                                                <button
+                                                    aria-controls={section.contentId}
+                                                    aria-expanded={section.ariaExpanded}
+                                                    class="slds-button slds-section__title-action"
+                                                    data-id={section.id}
+                                                    onclick={handleSectionToggle}
+                                                    type="button">
+                                                    <lightning-icon
+                                                        class="slds-section__title-action-icon slds-button__icon slds-button__icon_left"
+                                                        icon-name="utility:switch"
+                                                        size="x-small"
+                                                        alternative-text="Toggle section">
+                                                    </lightning-icon>
+                                                    <span class="slds-truncate" title={section.title}>{section.title}</span>
+                                                </button>
+                                            </h3>
+                                            <div
+                                                aria-hidden={section.ariaHidden}
+                                                class="slds-section__content"
+                                                id={section.contentId}>
+                                                <div class="c-campaign-detail__section-grid">
+                                                    <template for:each={section.fields} for:item="field">
+                                                        <lightning-textarea
+                                                            lwc:if={field.isTextarea}
+                                                            key={field.key}
+                                                            class={field.cssClass}
+                                                            label={field.label}
+                                                            value={field.value}
+                                                            read-only>
+                                                        </lightning-textarea>
+                                                        <lightning-input
+                                                            lwc:else
+                                                            key={field.key}
+                                                            class={field.cssClass}
+                                                            label={field.label}
+                                                            value={field.value}
+                                                            type={field.type}
+                                                            read-only>
+                                                        </lightning-input>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                            </lightning-tab>
+                        </lightning-tabset>
+                    </article>
+                </div>
+
+                <!-- RIGHT COLUMN: Einstein Insights + Activity -->
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+
+                    <!-- Einstein Insights card -->
+                    <article class="c-campaign-detail__card c-campaign-detail__insights">
+                        <header class="c-campaign-detail__card-header">
+                            <div class="c-campaign-detail__card-title">
+                                <span class="c-campaign-detail__card-icon">
+                                    <lightning-icon
+                                        icon-name="standard:einstein"
+                                        size="small"
+                                        alternative-text="Einstein">
+                                    </lightning-icon>
+                                </span>
+                                <h2 class="c-campaign-detail__card-heading">Einstein Insights</h2>
+                            </div>
+                        </header>
+                        <div class="c-campaign-detail__insights-body">
+                            <p class="c-campaign-detail__insights-title">No insights at the moment</p>
+                            <p class="c-campaign-detail__insights-description">
+                                Einstein is analyzing your data 24 hours a day, seven days a week.
+                                When Einstein detects new insights, they will appear here.
+                            </p>
+                            <p>
+                                <a href="#" class="c-campaign-detail__insights-link">Learn More</a>
+                            </p>
+                        </div>
+                    </article>
+
+                    <!-- Activity card -->
+                    <div class="slds-m-top_medium">
+                        <ui-activity-feed
+                            title="Activity"
+                            sections={activityFeedSections}
+                            footer-text={activityFooterText}>
+                        </ui-activity-feed>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <template lwc:else>
+            <div class="slds-illustration slds-illustration_small slds-p-around_large slds-text-align_center">
+                <p class="slds-text-heading_medium">Campaign not found</p>
+                <p class="slds-m-top_small">
+                    <lightning-button label="Back to Campaigns" variant="brand" onclick={handleBackToList}></lightning-button>
+                </p>
+            </div>
+        </template>
+    </div>
+</template>

@@ -1,3 +1,63 @@
+/* ---------------------------------------------------------------------------
+ * Brand theming: Honda
+ * --------------------------------------------------------------------------
+ * Overrides the SLDS 2 (Cosmos) brand + accent global styling hooks so the
+ * starter kit follows the Honda brand. Primary brand color is #c00.
+ * Applied at :root so both light and dark color schemes inherit it.
+ * --------------------------------------------------------------------------- */
+:root {
+    /* Brand base scale (10 lightest → 100 darkest), primary at 50. */
+    --slds-g-color-brand-base-10: #fce8e8;
+    --slds-g-color-brand-base-15: #f8d0d0;
+    --slds-g-color-brand-base-20: #f4b8b8;
+    --slds-g-color-brand-base-30: #ec8989;
+    --slds-g-color-brand-base-40: #e35a5a;
+    --slds-g-color-brand-base-50: #cc0000;
+    --slds-g-color-brand-base-60: #a30000;
+    --slds-g-color-brand-base-65: #8f0000;
+    --slds-g-color-brand-base-70: #7a0000;
+    --slds-g-color-brand-base-80: #5c0000;
+    --slds-g-color-brand-base-90: #3d0000;
+    --slds-g-color-brand-base-95: #2e0000;
+    --slds-g-color-brand-base-100: #1f0000;
+
+    /* Accent (interactive emphasis) — pairs with --slds-g-color-on-accent-* (white). */
+    --slds-g-color-accent-1: #cc0000;
+    --slds-g-color-accent-2: #a30000;
+    --slds-g-color-accent-3: #7a0000;
+    --slds-g-color-accent-container-1: #fce8e8;
+    --slds-g-color-accent-container-2: #f8d0d0;
+    --slds-g-color-accent-container-3: #f4b8b8;
+    --slds-g-color-accent-dark-1: #7a0000;
+    --slds-g-color-accent-dark-2: #4d0000;
+    --slds-g-color-accent-light-1: #f8d0d0;
+    --slds-g-color-accent-light-2: #fce8e8;
+
+    /* ---------------------------------------------------------------------
+     * Brand button override
+     * ---------------------------------------------------------------------
+     * Forces every <lightning-button variant="brand"> / .slds-button_brand
+     * across the app to render with a solid #a30000 background and white
+     * label, regardless of theme.
+     *
+     * We override the public component-level hooks documented by SLDS 2
+     * (--slds-c-button-brand-*) — these are the supported integration
+     * points for re-skinning the brand button without touching .slds-*
+     * selectors directly. Hover/active deepen to --slds-g-color-accent-3
+     * (#7a0000) so users still get an affordance on interaction.
+     * --------------------------------------------------------------------- */
+    --slds-c-button-brand-color-background: #a30000;
+    --slds-c-button-brand-color-border: #a30000;
+    --slds-c-button-brand-text-color: var(--slds-g-color-on-accent-1, #ffffff);
+
+    --slds-c-button-brand-color-background-hover: var(--slds-g-color-accent-3, #7a0000);
+    --slds-c-button-brand-color-border-hover: var(--slds-g-color-accent-3, #7a0000);
+    --slds-c-button-brand-text-color-hover: var(--slds-g-color-on-accent-1, #ffffff);
+
+    --slds-c-button-brand-color-background-active: var(--slds-g-color-accent-3, #7a0000);
+    --slds-c-button-brand-text-color-active: var(--slds-g-color-on-accent-1, #ffffff);
+}
+
 html.builder-active {
     overscroll-behavior-x: none;
     overscroll-behavior-y: none;

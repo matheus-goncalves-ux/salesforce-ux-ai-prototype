@@ -214,6 +214,32 @@
         </lightning-card>
         </lightning-layout-item>
 
+        <lightning-layout-item size="12" class="slds-m-bottom_large">
+        <!-- Reusable: Activity Feed -->
+        <lightning-card title="Reusable: Activity Feed">
+            <p class="slds-m-bottom_small slds-text-body_regular">
+                <code>&lt;ui-activity-feed&gt;</code> is a reusable timeline card used in the
+                Lead, Campaign, and Contact detail pages. It wraps a standard
+                <code>lightning-tabset</code>, two <code>lightning-button-group</code> split
+                buttons (New Task / New Event), a filter summary, and collapsible
+                sections containing a vertical timeline of tasks and events with
+                expandable detail panels.
+            </p>
+            <p class="slds-m-bottom_small slds-text-body_regular">
+                Configure via the <code>title</code>, <code>filter-summary</code>,
+                <code>footer-text</code>, and <code>sections</code> attributes. Each
+                section accepts <code>activities</code> plus optional
+                <code>empty-title</code> / <code>empty-description</code> copy for the
+                empty state shown below in the first group.
+            </p>
+            <ui-activity-feed
+                title="Activity"
+                sections={activityFeedDemoSections}
+                footer-text="No past activity. Completed meetings and tasks appear here.">
+            </ui-activity-feed>
+        </lightning-card>
+        </lightning-layout-item>
+
         <lightning-layout-item size="12">
             <div class="slds-text-align_center slds-m-top_large slds-m-bottom_large slds-text-color_weak">
                 Built with Vite + LWC + Lightning Base Components + SLDS

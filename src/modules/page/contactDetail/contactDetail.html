@@ -37,10 +37,19 @@
                 </div>
             </ui-page-header>
 
-            <!-- Body: 2/3 Details + 1/3 Activity -->
-            <div class="slds-grid slds-gutters slds-m-top_medium">
-                <!-- Left 2/3: Details Card -->
-                <div class="slds-col slds-size_1-of-1 slds-medium-size_8-of-12">
+            <!-- Body: 3-column grid (Flexicard | Details | Activity + Accounts) -->
+            <div class="slds-grid slds-gutters slds-wrap slds-m-top_medium">
+                <!-- Left 1/3: Account Flexicard (only element in this column) -->
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                    <ui-account-flexicard
+                        image-src={accountImage.src}
+                        image-alt={accountImage.alt}
+                        sections={accountFlexicardSections}>
+                    </ui-account-flexicard>
+                </div>
+
+                <!-- Middle 1/3: Contact Details -->
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
                     <lightning-card title="Contact Details">
                         <div class="c-contact-details-grid slds-p-bottom_medium">
                             <template for:each={cardFields} for:item="field">
@@ -72,35 +81,112 @@
                             <lightning-button label="Log a Call" variant="neutral"></lightning-button>
                             <lightning-button label="New Task" variant="neutral"></lightning-button>
                         </lightning-button-group>
-                        <div class="slds-p-bottom_small">
-                            <ul class="slds-timeline">
-                                <template for:each={activityItems} for:item="item">
-                                    <li key={item.id} class="slds-timeline__item">
-                                        <div class="slds-media slds-m-bottom_small">
-                                            <div class="slds-media__figure">
-                                                <template lwc:if={item.type}>
-                                                    <lightning-icon
-                                                        icon-name={item.iconName}
-                                                        size="small"
-                                                        alternative-text={item.type}>
-                                                    </lightning-icon>
-                                                </template>
-                                            </div>
-                                            <div class="slds-media__body">
-                                                <div class="slds-grid slds-grid_align-spread">
-                                                    <p class="slds-truncate">
-                                                        <strong>{item.subject}</strong>
-                                                    </p>
-                                                    <p class="slds-text-body_small slds-text-color_weak slds-no-flex">{item.date}</p>
+                        <lightning-tabset>
+                            <lightning-tab label="Activity">
+                                <ul class="slds-timeline slds-p-bottom_small">
+                                    <template for:each={activityItems} for:item="item">
+                                        <li key={item.id} class="slds-timeline__item">
+                                            <div class="slds-media slds-m-bottom_small">
+                                                <div class="slds-media__figure">
+                                                    <template lwc:if={item.type}>
+                                                        <lightning-icon
+                                                            icon-name={item.iconName}
+                                                            size="small"
+                                                            alternative-text={item.type}>
+                                                        </lightning-icon>
+                                                    </template>
                                                 </div>
-                                                <p class="slds-text-body_small slds-m-top_xx-small">{item.description}</p>
+                                                <div class="slds-media__body">
+                                                    <div class="slds-grid slds-grid_align-spread">
+                                                        <p class="slds-truncate">
+                                                            <strong>{item.subject}</strong>
+                                                        </p>
+                                                        <p class="slds-text-body_small slds-text-color_weak slds-no-flex">{item.date}</p>
+                                                    </div>
+                                                    <p class="slds-text-body_small slds-m-top_xx-small">{item.description}</p>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </li>
-                                </template>
-                            </ul>
-                        </div>
+                                        </li>
+                                    </template>
+                                </ul>
+                            </lightning-tab>
+                            <lightning-tab label="Chatter">
+                                <ul class="slds-feed__list slds-p-bottom_small">
+                                    <template for:each={chatterPosts} for:item="post">
+                                        <li key={post.id} class="slds-feed__item slds-p-around_small">
+                                            <article class="slds-media">
+                                                <div class="slds-media__figure">
+                                                    <lightning-icon
+                                                        icon-name="standard:user"
+                                                        size="small"
+                                                        alternative-text={post.author}>
+                                                    </lightning-icon>
+                                                </div>
+                                                <div class="slds-media__body">
+                                                    <div class="slds-grid slds-grid_align-spread">
+                                                        <p class="slds-text-body_small">
+                                                            <strong>{post.author}</strong>
+                                                        </p>
+                                                        <p class="slds-text-body_small slds-text-color_weak slds-no-flex">{post.date}</p>
+                                                    </div>
+                                                    <p class="slds-text-body_small slds-m-top_xx-small">{post.body}</p>
+                                                    <div class="slds-m-top_x-small">
+                                                        <template for:each={post.likes} for:item="like">
+                                                            <span key={like} class="slds-badge slds-m-right_xx-small">{like}</span>
+                                                        </template>
+                                                    </div>
+                                                </div>
+                                            </article>
+                                        </li>
+                                    </template>
+                                </ul>
+                            </lightning-tab>
+                        </lightning-tabset>
                     </lightning-card>
+
+                    <!-- Related list: Accounts -->
+                    <div class="slds-m-top_medium">
+                        <lightning-card icon-name="standard:account" title={accountsCardTitle}>
+                            <lightning-button
+                                slot="actions"
+                                label="New"
+                                variant="neutral">
+                            </lightning-button>
+                            <template lwc:if={hasRelatedAccounts}>
+                                <ul class="slds-has-dividers_top-space">
+                                    <template for:each={relatedAccounts} for:item="account">
+                                        <li key={account.id} class="slds-item slds-p-vertical_x-small slds-p-horizontal_medium">
+                                            <article class="slds-media slds-media_center">
+                                                <div class="slds-media__figure">
+                                                    <lightning-icon
+                                                        icon-name="standard:account"
+                                                        size="small"
+                                                        alternative-text="Account">
+                                                    </lightning-icon>
+                                                </div>
+                                                <div class="slds-media__body slds-has-flexi-truncate">
+                                                    <h3 class="slds-text-heading_small slds-truncate">
+                                                        <a href="#">{account.name}</a>
+                                                    </h3>
+                                                    <p class="slds-text-body_small slds-text-color_weak slds-truncate">
+                                                        {account.industry} &middot; {account.type} &middot; {account.location}
+                                                    </p>
+                                                </div>
+                                            </article>
+                                        </li>
+                                    </template>
+                                </ul>
+                            </template>
+                            <template lwc:else>
+                                <p class="slds-p-around_medium slds-text-body_small slds-text-color_weak">
+                                    No related accounts.
+                                </p>
+                            </template>
+                            <div slot="footer">
+                                <a href="#">View All</a>
+                            </div>
+                        </lightning-card>
+                    </div>
                 </div>
             </div>
         </template>

@@ -41,6 +41,32 @@ export const routes = [
     navHighlight: 'contacts',
   },
   {
+    path: '/leads',
+    component: 'page-leads',
+    title: 'Leads',
+    navPage: 'leads',
+    navLabel: 'Leads',
+  },
+  {
+    path: '/leads/:id',
+    component: 'page-lead-detail',
+    title: (params) => `Lead ${params.id}`,
+    navHighlight: 'leads',
+  },
+  {
+    path: '/campaigns',
+    component: 'page-campaigns',
+    title: 'Campaigns',
+    navPage: 'campaigns',
+    navLabel: 'Campaigns',
+  },
+  {
+    path: '/campaigns/:id',
+    component: 'page-campaign-detail',
+    title: (params) => `Campaign ${params.id}`,
+    navHighlight: 'campaigns',
+  },
+  {
     path: '/',
     component: 'page-builder',
     title: 'Builder',

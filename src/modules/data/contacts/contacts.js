@@ -113,3 +113,9 @@ export function getAllContacts() {
 export function getContactById(id) {
     return CONTACTS.find(c => c.id === id) || null;
 }
+
+export function getContactsByIds(ids) {
+    if (!Array.isArray(ids) || !ids.length) return [];
+    const set = new Set(ids);
+    return CONTACTS.filter((c) => set.has(c.id));
+}

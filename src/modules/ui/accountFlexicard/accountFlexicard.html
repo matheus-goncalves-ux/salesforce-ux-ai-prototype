@@ -1,0 +1,68 @@
+<template>
+    <article class="c-account-flexicard">
+
+        <!-- Cover image (or neutral placeholder when imageSrc is empty). -->
+        <div class="c-account-flexicard__cover">
+            <template lwc:if={hasImage}>
+                <img
+                    class="c-account-flexicard__image"
+                    src={imageSrc}
+                    alt={imageAlt}>
+            </template>
+            <template lwc:else>
+                <div class="c-account-flexicard__placeholder" aria-hidden="true">
+                    <lightning-icon
+                        icon-name={placeholderIcon}
+                        size="medium"
+                        alternative-text="">
+                    </lightning-icon>
+                </div>
+            </template>
+        </div>
+
+        <!-- Body: each section is a labeled group of rows. -->
+        <div class="c-account-flexicard__body">
+            <template for:each={computedSections} for:item="section">
+                <section
+                    key={section.id}
+                    class="c-account-flexicard__section">
+                    <template lwc:if={section.hasTitle}>
+                        <h3 class="c-account-flexicard__section-title">{section.title}</h3>
+                    </template>
+                    <div class="c-account-flexicard__rows">
+                        <template for:each={section.blocks} for:item="block">
+
+                            <!-- Indented sub-group with a left rule. -->
+                            <template lwc:if={block.isSubGroup}>
+                                <div key={block.id} class="c-account-flexicard__subgroup">
+                                    <div class="c-account-flexicard__subgroup-inner">
+                                        <template for:each={block.rows} for:item="row">
+                                            <div
+                                                key={row.id}
+                                                class="c-account-flexicard__row c-account-flexicard__row_sub">
+                                                <span class={row.labelClass}>{row.label}</span>
+                                                <span class={row.valueClass}>{row.value}</span>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </div>
+                            </template>
+
+                            <!-- Regular row (optionally preceded by a divider). -->
+                            <template lwc:else>
+                                <template lwc:if={block.row.hasDividerAbove}>
+                                    <div key={block.row.dividerId} class="c-account-flexicard__divider" aria-hidden="true"></div>
+                                </template>
+                                <div key={block.id} class="c-account-flexicard__row">
+                                    <span class={block.row.labelClass}>{block.row.label}</span>
+                                    <span class={block.row.valueClass}>{block.row.value}</span>
+                                </div>
+                            </template>
+
+                        </template>
+                    </div>
+                </section>
+            </template>
+        </div>
+    </article>
+</template>

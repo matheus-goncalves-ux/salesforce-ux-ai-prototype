@@ -18,7 +18,7 @@ import {
   DEFAULT_APP_ID,
 } from './apps.config.js';
 
-const DEFAULT_TITLE = 'Salesforce';
+const DEFAULT_TITLE = 'Honda';
 
 const HASH_MODE = import.meta.env.VITE_ROUTER_MODE === 'hash';
 

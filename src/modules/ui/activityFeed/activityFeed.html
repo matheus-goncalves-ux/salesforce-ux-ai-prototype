@@ -1,0 +1,233 @@
+<template>
+    <article class="c-activity-feed">
+
+        <!-- Activity tabs: defer the tab strip to the LBC `lightning-tabset`
+             (SLDS-compliant) and host the whole feed under a single tab. -->
+        <lightning-tabset class="c-activity-feed__tabset">
+            <lightning-tab label={title}>
+                <div class="c-activity-feed__body">
+
+                    <!-- Action buttons: New Task + New Event rendered as
+                         SLDS button groups (label button + dropdown menu),
+                         using the `lightning-button-group` LBC which maps to
+                         the SLDS `button-groups` blueprint. -->
+                    <div class="c-activity-feed__actions">
+                        <lightning-button-group class="c-activity-feed__action-group">
+                            <lightning-button
+                                label={newTaskLabel}
+                                icon-name="action:new_task"
+                                icon-position="left"
+                                onclick={handleNewTask}>
+                            </lightning-button>
+                            <lightning-button-menu
+                                alternative-text="More task actions"
+                                menu-alignment="auto-right"
+                                icon-name="utility:down"
+                                onselect={handleTaskMenuSelect}>
+                                <lightning-menu-item value="log-call" label="Log a Call"></lightning-menu-item>
+                                <lightning-menu-item value="send-email" label="Send Email"></lightning-menu-item>
+                                <lightning-menu-item value="new-task" label="New Task"></lightning-menu-item>
+                            </lightning-button-menu>
+                        </lightning-button-group>
+                        <lightning-button-group class="c-activity-feed__action-group">
+                            <lightning-button
+                                label={newEventLabel}
+                                icon-name="action:new_event"
+                                icon-position="left"
+                                onclick={handleNewEvent}>
+                            </lightning-button>
+                            <lightning-button-menu
+                                alternative-text="More event actions"
+                                menu-alignment="auto-right"
+                                icon-name="utility:down"
+                                onselect={handleEventMenuSelect}>
+                                <lightning-menu-item value="new-event" label="New Event"></lightning-menu-item>
+                                <lightning-menu-item value="new-meeting" label="New Meeting"></lightning-menu-item>
+                            </lightning-button-menu>
+                        </lightning-button-group>
+                    </div>
+
+        <!-- Filter summary + filter settings affordance. -->
+        <div class="c-activity-feed__filter-row">
+            <span class="c-activity-feed__filter-text">{filterSummary}</span>
+            <lightning-button-icon
+                icon-name="utility:settings"
+                variant="border-filled"
+                alternative-text="Filter settings"
+                size="x-small"
+                class="c-activity-feed__filter-button">
+            </lightning-button-icon>
+        </div>
+
+        <!-- Quick action links: Refresh • Expand All • View All. -->
+        <div class="c-activity-feed__links">
+            <a href="#" class="c-activity-feed__link" onclick={handleRefresh}>{refreshLabel}</a>
+            <span class="c-activity-feed__link-sep" aria-hidden="true">•</span>
+            <a href="#" class="c-activity-feed__link" onclick={handleExpandAll}>{expandAllLabel}</a>
+            <span class="c-activity-feed__link-sep" aria-hidden="true">•</span>
+            <a href="#" class="c-activity-feed__link" onclick={handleViewAll}>{viewAllLabel}</a>
+        </div>
+
+        <!-- Collapsible sections with timelines inside. -->
+        <div class="c-activity-feed__sections">
+            <template for:each={computedSections} for:item="section">
+                <div key={section.id} class={section.sectionClass}>
+                    <h3 class="slds-section__title c-activity-feed__section-header">
+                        <button
+                            aria-controls={section.contentId}
+                            aria-expanded={section.ariaExpanded}
+                            class="slds-button slds-section__title-action c-activity-feed__section-button"
+                            data-section-id={section.id}
+                            onclick={handleSectionToggle}
+                            type="button">
+                            <lightning-icon
+                                icon-name="utility:switch"
+                                size="xx-small"
+                                class="slds-section__title-action-icon slds-button__icon slds-button__icon_left c-activity-feed__section-chevron"
+                                alternative-text="Toggle section">
+                            </lightning-icon>
+                            <span class="c-activity-feed__section-label">{section.label}</span>
+                        </button>
+                    </h3>
+                    <div
+                        aria-hidden={section.ariaHidden}
+                        class="slds-section__content c-activity-feed__section-content"
+                        id={section.contentId}>
+                        <template lwc:if={section.hasItems}>
+                            <ul class="c-activity-feed__list">
+                                <template for:each={section.items} for:item="item">
+                                    <li key={item.id} class={item.itemClass}>
+
+                                        <!-- Left rail: chevron + icon + bar. -->
+                                        <div class="c-activity-feed__rail">
+                                            <button
+                                                class="slds-button slds-button_icon c-activity-feed__chevron"
+                                                aria-controls={item.detailsId}
+                                                aria-expanded={item.ariaExpanded}
+                                                data-item-id={item.id}
+                                                onclick={handleItemToggle}
+                                                title={item.toggleLabel}
+                                                type="button">
+                                                <lightning-icon
+                                                    icon-name={item.chevronIcon}
+                                                    size="xx-small"
+                                                    alternative-text={item.toggleLabel}>
+                                                </lightning-icon>
+                                            </button>
+                                            <span class={item.iconWrapperClass}>
+                                                <lightning-icon
+                                                    icon-name={item.iconName}
+                                                    size="small"
+                                                    alternative-text={item.iconAlt}>
+                                                </lightning-icon>
+                                            </span>
+                                            <span class={item.barClass} aria-hidden="true"></span>
+                                        </div>
+
+                                        <!-- Right content. -->
+                                        <div class="c-activity-feed__content">
+                                            <div class="c-activity-feed__title-row">
+                                                <div class="c-activity-feed__title">
+                                                    <template lwc:if={item.isTask}>
+                                                        <lightning-input
+                                                            type="checkbox"
+                                                            variant="label-hidden"
+                                                            label={item.subject}
+                                                            checked={item.isComplete}
+                                                            class="c-activity-feed__checkbox">
+                                                        </lightning-input>
+                                                    </template>
+                                                    <a
+                                                        href="#"
+                                                        class="c-activity-feed__title-link"
+                                                        title={item.subject}>
+                                                        {item.subject}
+                                                    </a>
+                                                    <template lwc:if={item.isEvent}>
+                                                        <lightning-icon
+                                                            icon-name="utility:world"
+                                                            size="xx-small"
+                                                            alternative-text="Public event"
+                                                            class="c-activity-feed__title-icon">
+                                                        </lightning-icon>
+                                                    </template>
+                                                </div>
+                                                <div class="c-activity-feed__timestamp">
+                                                    <span class="c-activity-feed__timestamp-text">{item.timestamp}</span>
+                                                    <lightning-button-icon
+                                                        icon-name="utility:down"
+                                                        variant="border-filled"
+                                                        alternative-text="Activity actions"
+                                                        size="xx-small"
+                                                        class="c-activity-feed__timestamp-menu">
+                                                    </lightning-button-icon>
+                                                </div>
+                                            </div>
+                                            <template lwc:if={item.hasActor}>
+                                                <p class="c-activity-feed__attribution">
+                                                    <a href="#" class="c-activity-feed__attribution-link">{item.actor}</a>
+                                                    <template lwc:if={item.actionVerb}>
+                                                        <span class="c-activity-feed__attribution-text">{item.actionVerb}</span>
+                                                    </template>
+                                                    <template lwc:if={item.hasTarget}>
+                                                        <a href="#" class="c-activity-feed__attribution-link">{item.target}</a>
+                                                    </template>
+                                                    <template lwc:if={item.hasExtraText}>
+                                                        <span class="c-activity-feed__attribution-text">{item.extraText}</span>
+                                                    </template>
+                                                </p>
+                                            </template>
+                                            <template lwc:if={item.isExpanded}>
+                                                <template lwc:if={item.hasDetails}>
+                                                    <div class="c-activity-feed__details" id={item.detailsId}>
+                                                        <template lwc:if={item.detailFields.length}>
+                                                            <div class="c-activity-feed__details-grid">
+                                                                <template for:each={item.detailFields} for:item="field">
+                                                                    <div key={field.key} class={field.cellClass}>
+                                                                        <p class="c-activity-feed__details-label">{field.label}</p>
+                                                                        <template lwc:if={field.isLink}>
+                                                                            <a href="#" class="c-activity-feed__details-link">{field.value}</a>
+                                                                        </template>
+                                                                        <template lwc:else>
+                                                                            <p class="c-activity-feed__details-value">{field.value}</p>
+                                                                        </template>
+                                                                    </div>
+                                                                </template>
+                                                            </div>
+                                                        </template>
+                                                        <template lwc:if={item.detailDescription}>
+                                                            <div class="c-activity-feed__details-cell c-activity-feed__details-cell_full">
+                                                                <p class="c-activity-feed__details-label">Description</p>
+                                                                <p class="c-activity-feed__details-body">{item.detailDescription}</p>
+                                                            </div>
+                                                        </template>
+                                                    </div>
+                                                </template>
+                                            </template>
+                                        </div>
+                                    </li>
+                                </template>
+                            </ul>
+                        </template>
+                        <template lwc:elseif={section.hasEmptyState}>
+                            <div class="c-activity-feed__empty-state" role="status">
+                                <template lwc:if={section.emptyTitle}>
+                                    <p class="c-activity-feed__empty-title">{section.emptyTitle}</p>
+                                </template>
+                                <template lwc:if={section.emptyDescription}>
+                                    <p class="c-activity-feed__empty-description">{section.emptyDescription}</p>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </template>
+        </div>
+        <template lwc:if={footerText}>
+            <p class="c-activity-feed__footer-text">{footerText}</p>
+        </template>
+                </div>
+            </lightning-tab>
+        </lightning-tabset>
+    </article>
+</template>

@@ -1,0 +1,414 @@
+/*
+ * Activity feed: mirrors the Figma "Activity feed" card (node 35:13211)
+ * while staying inside SLDS conventions. The component composes a few
+ * SLDS primitives (slds-section, slds-button, lightning-* icons) with
+ * a small set of custom `c-activity-feed__*` classes that handle the
+ * timeline rail, the colored standard-icon chips, and the expanded
+ * details panel.
+ */
+
+:host {
+    display: block;
+}
+
+/* Outer card chrome. Padding/gap live on `__body` so the tab strip
+   provided by `lightning-tabset` aligns to the card edges. */
+.c-activity-feed {
+    background-color: var(--slds-g-color-surface-container-1, #ffffff);
+    border-radius: var(--slds-g-radius-border-4, 1.25rem);
+    color: var(--slds-g-color-on-surface-2, #2e2e2e);
+    overflow: hidden;
+}
+
+.c-activity-feed__tabset {
+    display: block;
+    --slds-c-tabs-list-spacing-inline-start: var(--slds-g-spacing-4, 1rem);
+}
+
+.c-activity-feed__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--slds-g-spacing-4, 1rem);
+    padding: var(--slds-g-spacing-4, 1rem);
+}
+
+/* ---------- Action buttons (New Task / New Event) ---------- */
+
+/* Container that lays out the two `lightning-button-group` action pills
+   side-by-side with a small gap. The button-group component itself
+   handles internal spacing/borders between the label button and the
+   dropdown caret. */
+.c-activity-feed__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--slds-g-spacing-2, 0.5rem);
+}
+
+.c-activity-feed__action-group {
+    display: inline-flex;
+}
+
+/* ---------- Filter row + quick links ---------- */
+
+.c-activity-feed__filter-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--slds-g-spacing-3, 0.75rem);
+}
+
+.c-activity-feed__filter-text {
+    font-size: var(--slds-g-font-scale-neg-1, 0.75rem);
+    color: var(--slds-g-color-on-surface-2, #2e2e2e);
+}
+
+.c-activity-feed__links {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--slds-g-spacing-1, 0.25rem);
+}
+
+.c-activity-feed__link {
+    font-size: var(--slds-g-font-scale-2, 0.8125rem);
+    font-weight: 590;
+    color: var(--slds-g-color-accent-2, #0079ce);
+    text-decoration: none;
+}
+
+.c-activity-feed__link:hover,
+.c-activity-feed__link:focus {
+    text-decoration: underline;
+}
+
+.c-activity-feed__link-sep {
+    color: var(--slds-g-color-on-surface-1, #5c5c5c);
+    font-size: var(--slds-g-font-scale-neg-1, 0.75rem);
+}
+
+/* ---------- Sections ---------- */
+
+.c-activity-feed__sections {
+    display: flex;
+    flex-direction: column;
+    gap: var(--slds-g-spacing-3, 0.75rem);
+}
+
+.c-activity-feed__section-header {
+    margin: 0;
+}
+
+.c-activity-feed__section-button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: var(--slds-g-spacing-2, 0.5rem);
+    padding-block: var(--slds-g-spacing-1, 0.25rem);
+    padding-inline: var(--slds-g-spacing-2, 0.5rem);
+    background-color: var(--slds-g-color-surface-container-2, #f3f3f3);
+    border-radius: var(--slds-g-radius-border-2, 0.5rem);
+    color: var(--slds-g-color-on-surface-2, #2e2e2e);
+    font-weight: 590;
+    font-size: var(--slds-g-font-scale-2, 0.8125rem);
+    line-height: var(--slds-g-font-lineheight-2, 1.25);
+}
+
+.c-activity-feed__section-label {
+    flex: 1 1 auto;
+    text-align: start;
+}
+
+.c-activity-feed__section-content {
+    padding-block-start: var(--slds-g-spacing-2, 0.5rem);
+}
+
+/* ---------- Timeline list ---------- */
+
+.c-activity-feed__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.c-activity-feed__item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: var(--slds-g-spacing-3, 0.75rem);
+    padding-block: var(--slds-g-spacing-1, 0.25rem);
+    background-color: var(--slds-g-color-surface-1, #ffffff);
+}
+
+.c-activity-feed__rail {
+    display: grid;
+    grid-template-columns: 1rem 1.5rem;
+    grid-template-rows: auto 1fr;
+    column-gap: var(--slds-g-spacing-2, 0.5rem);
+    align-items: start;
+    padding-block-start: var(--slds-g-spacing-1, 0.25rem);
+}
+
+.c-activity-feed__chevron {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: center;
+    color: var(--slds-g-color-on-surface-1, #5c5c5c);
+}
+
+.c-activity-feed__icon {
+    grid-column: 2;
+    grid-row: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: var(--slds-g-radius-border-circle, 9999px);
+}
+
+.c-activity-feed__icon lightning-icon {
+    --slds-c-icon-color-foreground-default: var(--slds-g-color-on-accent-1, #ffffff);
+}
+
+.c-activity-feed__icon_task {
+    background-color: var(--slds-g-color-palette-green-60, #3ba755);
+}
+
+.c-activity-feed__icon_event {
+    background-color: var(--slds-g-color-palette-violet-60, #cb65ff);
+}
+
+.c-activity-feed__bar {
+    grid-column: 2;
+    grid-row: 2;
+    justify-self: center;
+    width: 2px;
+    min-height: 0.5rem;
+    border-radius: var(--slds-g-radius-border-1, 0.25rem);
+    align-self: stretch;
+    margin-block-start: var(--slds-g-spacing-1, 0.25rem);
+}
+
+.c-activity-feed__bar_task {
+    background-color: var(--slds-g-color-palette-green-60, #3ba755);
+}
+
+.c-activity-feed__bar_event {
+    background-color: var(--slds-g-color-palette-violet-60, #cb65ff);
+}
+
+.c-activity-feed__item_last .c-activity-feed__bar {
+    display: none;
+}
+
+/* ---------- Content column ---------- */
+
+.c-activity-feed__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--slds-g-spacing-2, 0.5rem);
+    min-width: 0;
+    padding-block-end: var(--slds-g-spacing-3, 0.75rem);
+}
+
+.c-activity-feed__title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--slds-g-spacing-2, 0.5rem);
+    min-height: 1.75rem;
+    padding-inline: var(--slds-g-spacing-1, 0.25rem);
+}
+
+.c-activity-feed__title {
+    display: flex;
+    align-items: center;
+    gap: var(--slds-g-spacing-1, 0.25rem);
+    min-width: 0;
+}
+
+.c-activity-feed__checkbox {
+    --slds-c-checkbox-spacing-block-start: 0;
+}
+
+.c-activity-feed__title-link {
+    font-size: var(--slds-g-font-scale-2, 0.8125rem);
+    font-weight: 590;
+    color: var(--slds-g-color-accent-2, #0079ce);
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.c-activity-feed__title-link:hover,
+.c-activity-feed__title-link:focus {
+    text-decoration: underline;
+}
+
+.c-activity-feed__item_complete .c-activity-feed__title-link {
+    text-decoration: line-through;
+    color: var(--slds-g-color-on-surface-1, #5c5c5c);
+}
+
+.c-activity-feed__title-icon {
+    color: var(--slds-g-color-on-surface-1, #5c5c5c);
+}
+
+.c-activity-feed__timestamp {
+    display: flex;
+    align-items: center;
+    gap: var(--slds-g-spacing-2, 0.5rem);
+    flex-shrink: 0;
+}
+
+.c-activity-feed__timestamp-text {
+    font-size: var(--slds-g-font-scale-2, 0.8125rem);
+    font-weight: 590;
+    color: var(--slds-g-color-on-surface-2, #2e2e2e);
+    white-space: nowrap;
+}
+
+.c-activity-feed__attribution {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem;
+    margin: 0;
+    padding-inline: var(--slds-g-spacing-1, 0.25rem);
+    font-size: var(--slds-g-font-scale-2, 0.8125rem);
+    line-height: var(--slds-g-font-lineheight-2, 1.25);
+}
+
+.c-activity-feed__attribution-link {
+    color: var(--slds-g-color-accent-2, #0079ce);
+    text-decoration: none;
+}
+
+.c-activity-feed__attribution-link:hover,
+.c-activity-feed__attribution-link:focus {
+    text-decoration: underline;
+}
+
+.c-activity-feed__attribution-text {
+    color: var(--slds-g-color-on-surface-1, #5c5c5c);
+}
+
+/* ---------- Expanded details panel ---------- */
+
+.c-activity-feed__details {
+    display: flex;
+    flex-direction: column;
+    gap: var(--slds-g-spacing-3, 0.75rem);
+    padding: var(--slds-g-spacing-4, 1rem);
+    border: 1px solid var(--slds-g-color-border-1, #c9c9c9);
+    border-radius: var(--slds-g-radius-border-3, 0.75rem);
+    background-color: var(--slds-g-color-surface-container-2, #f3f3f3);
+}
+
+.c-activity-feed__details-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--slds-g-spacing-3, 0.75rem);
+}
+
+.c-activity-feed__details-cell {
+    display: flex;
+    flex-direction: column;
+    gap: var(--slds-g-spacing-1, 0.25rem);
+    min-width: 0;
+}
+
+.c-activity-feed__details-cell_full {
+    grid-column: 1 / -1;
+}
+
+.c-activity-feed__details-label {
+    margin: 0;
+    font-size: var(--slds-g-font-scale-neg-1, 0.75rem);
+    color: var(--slds-g-color-on-surface-1, #5c5c5c);
+    line-height: var(--slds-g-font-lineheight-1, 1.25);
+}
+
+.c-activity-feed__details-value {
+    margin: 0;
+    font-size: var(--slds-g-font-scale-2, 0.8125rem);
+    color: var(--slds-g-color-on-surface-2, #2e2e2e);
+    line-height: var(--slds-g-font-lineheight-2, 1.25);
+}
+
+.c-activity-feed__details-link {
+    font-size: var(--slds-g-font-scale-2, 0.8125rem);
+    color: var(--slds-g-color-accent-2, #0079ce);
+    text-decoration: none;
+    word-break: break-word;
+}
+
+.c-activity-feed__details-link:hover,
+.c-activity-feed__details-link:focus {
+    text-decoration: underline;
+}
+
+.c-activity-feed__details-body {
+    margin: 0;
+    font-size: var(--slds-g-font-scale-2, 0.8125rem);
+    color: var(--slds-g-color-on-surface-3, #03234d);
+    line-height: var(--slds-g-font-lineheight-2, 1.25);
+}
+
+/* Hide section content when collapsed (slds-is-close already toggles
+   visibility on slds-section in SLDS 2, but this is an explicit fallback). */
+.c-activity-feed .slds-is-close > .c-activity-feed__section-content {
+    display: none;
+}
+
+/* ---------- Per-section empty state ---------- */
+
+.c-activity-feed__empty-state {
+    display: flex;
+    flex-direction: column;
+    gap: var(--slds-g-spacing-1, 0.25rem);
+    padding: var(--slds-g-spacing-3, 0.75rem) var(--slds-g-spacing-2, 0.5rem);
+    text-align: center;
+}
+
+.c-activity-feed__empty-title {
+    margin: 0;
+    font-size: var(--slds-g-font-scale-2, 0.8125rem);
+    font-weight: 590;
+    color: var(--slds-g-color-on-surface-2, #2e2e2e);
+    line-height: var(--slds-g-font-lineheight-2, 1.25);
+}
+
+.c-activity-feed__empty-description {
+    margin: 0;
+    font-size: var(--slds-g-font-scale-1, 0.875rem);
+    color: var(--slds-g-color-on-surface-1, #5c5c5c);
+    line-height: var(--slds-g-font-lineheight-2, 1.25);
+}
+
+/* ---------- Feed-level footer text ---------- */
+
+.c-activity-feed__footer-text {
+    margin: 0;
+    padding-block-start: var(--slds-g-spacing-3, 0.75rem);
+    text-align: center;
+    font-size: var(--slds-g-font-scale-1, 0.875rem);
+    color: var(--slds-g-color-on-surface-1, #5c5c5c);
+    line-height: var(--slds-g-font-lineheight-2, 1.25);
+}
+
+/* Stack details on narrow rails (the right rail can compress below 320px). */
+@media (max-width: 30rem) {
+    .c-activity-feed__details-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .c-activity-feed__title-row {
+        flex-wrap: wrap;
+    }
+    .c-activity-feed__timestamp {
+        flex-basis: 100%;
+        justify-content: flex-end;
+    }
+}

@@ -36,6 +36,61 @@ export default class Home extends LightningElement {
         ];
     }
 
+    /**
+     * Seed data for the `ui-activity-feed` demo card below. Mirrors the
+     * shape consumed by leadDetail / campaignDetail: an array of sections,
+     * each with its own activities. The first section showcases the empty
+     * state copy; the second shows one task (expanded by default with the
+     * fields/description panel) and one event.
+     */
+    get activityFeedDemoSections() {
+        return [
+            {
+                id: 'demo-upcoming',
+                label: 'Upcoming & Overdue',
+                defaultOpen: true,
+                activities: [],
+                emptyTitle: 'No activities to show.',
+                emptyDescription: 'Get started by sending an email, scheduling a task, and more.'
+            },
+            {
+                id: 'demo-june-2026',
+                label: 'June • 2026',
+                defaultOpen: true,
+                activities: [
+                    {
+                        id: 'demo-task-1',
+                        type: 'task',
+                        subject: 'Follow up on Q2 proposal',
+                        timestamp: 'Jun 10, 2026',
+                        actor: 'You',
+                        actionVerb: 'created a task related to',
+                        target: 'Acme Corp',
+                        defaultExpanded: true,
+                        details: {
+                            fields: [
+                                { label: 'Assigned To', value: 'You' },
+                                { label: 'Due Date', value: 'Jun 14, 2026' },
+                                { label: 'Priority', value: 'High' },
+                                { label: 'Related To', value: 'Acme Corp', isLink: true }
+                            ],
+                            description: 'Confirm pricing terms and send the revised SOW to procurement.'
+                        }
+                    },
+                    {
+                        id: 'demo-event-1',
+                        type: 'event',
+                        subject: 'Quarterly review meeting',
+                        timestamp: 'Jun 12, 2026 • 2:00 PM',
+                        actor: 'Sarah Johnson',
+                        actionVerb: 'scheduled an event with',
+                        target: 'Globex Industries'
+                    }
+                ]
+            }
+        ];
+    }
+
     handleInputChange(event) {
         this.inputValue = event.detail.value;
     }

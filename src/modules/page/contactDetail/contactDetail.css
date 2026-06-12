@@ -2,9 +2,15 @@ lightning-card {
     --slds-c-card-body-spacing-inline: var(--slds-g-spacing-var-inline-4);
 }
 
+/*
+ * Contact Details grid. Now that the Details card lives in a 4/12 slot
+ * (3-column page layout), a single-column stack reads better than the
+ * previous 2-column grid. The `__full-width` modifier is kept as a
+ * no-op safeguard so existing field metadata keeps working.
+ */
 .c-contact-details-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: var(--slds-g-spacing-3, 0.75rem);
 }
 
