@@ -85,18 +85,22 @@ html.builder-active {
 }
 
 /* ---------------------------------------------------------------------------
- * App launcher dropdown — contrast-safe hover / selected states
+ * Dropdown menu items — contrast-safe hover / selected states
  * ---------------------------------------------------------------------------
  * The Honda brand override above repoints --slds-g-color-accent-* to a
- * saturated deep red (#a30000). The raw SLDS dropdown used by the app
- * launcher waffle (ui/globalNavigation) styles `:hover`/`:focus` and the
- * `aria-current` "selected app" state with those accent tokens, but the
- * text color stays inherited from body (dark gray) — giving an unreadable
- * dark-on-dark pairing.
+ * saturated deep red (#a30000). Two families of dropdowns inherit that:
  *
- * We scope these overrides under our own `.app-launcher-dropdown`
- * namespace (added to the dropdown root in globalNavigation.html) so the
- * SLDS linter doesn't flag them as bare slds-* overrides.
+ *   1. The raw SLDS dropdown (e.g. the app launcher waffle in
+ *      ui/globalNavigation, namespaced under `.app-launcher-dropdown`).
+ *   2. Lightning base component menus — `lightning-button-menu` +
+ *      `lightning-menu-item` — used in activityFeed, leadDetail,
+ *      campaigns, etc. The LBC renders `<div class="slds-dropdown__item">
+ *      <a>...</a></div>` inside its (synthetic) shadow, and global.css
+ *      reaches in via the `lightning-menu-item` tag selector.
+ *
+ * Both apply the brand accent to `:hover`/`:focus` and `aria-current`/
+ * `slds-is-selected` states, but text color stays inherited from body
+ * (dark gray) — giving an unreadable dark-on-dark pairing.
  *
  * Force a contrast-safe pairing:
  *   - Hover / focus / kbd-focus  → soft pink tint background, dark text
@@ -105,7 +109,11 @@ html.builder-active {
  * --------------------------------------------------------------------------- */
 .app-launcher-dropdown .slds-dropdown__item > a:hover,
 .app-launcher-dropdown .slds-dropdown__item > a:focus,
-.app-launcher-dropdown .slds-dropdown__item.slds-has-focus > a {
+.app-launcher-dropdown .slds-dropdown__item.slds-has-focus > a,
+lightning-menu-item .slds-dropdown__item > a:hover,
+lightning-menu-item .slds-dropdown__item > a:focus,
+lightning-menu-item .slds-dropdown__item.slds-has-focus > a,
+lightning-menu-item .slds-dropdown__item.slds-is-focused > a {
     background-color: var(--slds-g-color-accent-container-1, #fce8e8);
     color: var(--slds-g-color-neutral-base-10, #181818);
     text-decoration: none;
@@ -114,7 +122,9 @@ html.builder-active {
 .app-launcher-dropdown .slds-dropdown__item[aria-current="page"] > a,
 .app-launcher-dropdown .slds-dropdown__item[aria-current="true"] > a,
 .app-launcher-dropdown .slds-dropdown__item.slds-is-selected > a,
-.app-launcher-dropdown .slds-dropdown__item.slds-is-active > a {
+.app-launcher-dropdown .slds-dropdown__item.slds-is-active > a,
+lightning-menu-item .slds-dropdown__item > a[aria-checked="true"],
+lightning-menu-item .slds-dropdown__item.slds-is-selected > a {
     background-color: var(--slds-g-color-accent-2, #a30000);
     color: var(--slds-g-color-on-accent-1, #ffffff);
 }
@@ -124,7 +134,11 @@ html.builder-active {
 .app-launcher-dropdown .slds-dropdown__item[aria-current="true"] > a:hover,
 .app-launcher-dropdown .slds-dropdown__item[aria-current="true"] > a:focus,
 .app-launcher-dropdown .slds-dropdown__item.slds-is-selected > a:hover,
-.app-launcher-dropdown .slds-dropdown__item.slds-is-selected > a:focus {
+.app-launcher-dropdown .slds-dropdown__item.slds-is-selected > a:focus,
+lightning-menu-item .slds-dropdown__item > a[aria-checked="true"]:hover,
+lightning-menu-item .slds-dropdown__item > a[aria-checked="true"]:focus,
+lightning-menu-item .slds-dropdown__item.slds-is-selected > a:hover,
+lightning-menu-item .slds-dropdown__item.slds-is-selected > a:focus {
     background-color: var(--slds-g-color-accent-3, #7a0000);
     color: var(--slds-g-color-on-accent-1, #ffffff);
 }
