@@ -1,7 +1,7 @@
 <template>
     <lightning-layout class="slds-global-header lightning-layout_custom" horizontal-align="spread" vertical-align="center">
         <lightning-layout-item class="slds-global-header__item">
-            <img src="/images/honda.svg" alt="Honda" class="c-global-header__logo" />
+            <img src={hondaLogo} alt="Honda" class="c-global-header__logo" />
         </lightning-layout-item>
         <lightning-layout-item class="slds-global-header__item slds-global-header__item_search" flexibility="auto">
             <lightning-input type="search" label="Search" placeholder="Search..." variant="label-hidden"
@@ -54,7 +54,7 @@
                 <lightning-layout-item class="slds-p-left_small">
                     <lightning-avatar
                         size="medium"
-                        src="/images/avatar1.jpg"
+                        src={userAvatar}
                         initials="AG"
                         fallback-icon-name="standard:person_account"
                         alternative-text="Austin Guevara"
