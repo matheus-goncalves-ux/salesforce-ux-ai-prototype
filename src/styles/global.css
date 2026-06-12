@@ -83,3 +83,48 @@ html.builder-active {
 .lightning-button-menu_custom .slds-button_icon-container-more {
     line-height: inherit;
 }
+
+/* ---------------------------------------------------------------------------
+ * App launcher dropdown — contrast-safe hover / selected states
+ * ---------------------------------------------------------------------------
+ * The Honda brand override above repoints --slds-g-color-accent-* to a
+ * saturated deep red (#a30000). The raw SLDS dropdown used by the app
+ * launcher waffle (ui/globalNavigation) styles `:hover`/`:focus` and the
+ * `aria-current` "selected app" state with those accent tokens, but the
+ * text color stays inherited from body (dark gray) — giving an unreadable
+ * dark-on-dark pairing.
+ *
+ * We scope these overrides under our own `.app-launcher-dropdown`
+ * namespace (added to the dropdown root in globalNavigation.html) so the
+ * SLDS linter doesn't flag them as bare slds-* overrides.
+ *
+ * Force a contrast-safe pairing:
+ *   - Hover / focus / kbd-focus  → soft pink tint background, dark text
+ *   - Current page / selected    → deep brand background, on-accent (white) text
+ *   - Current AND hovered        → deepen brand background, keep white text
+ * --------------------------------------------------------------------------- */
+.app-launcher-dropdown .slds-dropdown__item > a:hover,
+.app-launcher-dropdown .slds-dropdown__item > a:focus,
+.app-launcher-dropdown .slds-dropdown__item.slds-has-focus > a {
+    background-color: var(--slds-g-color-accent-container-1, #fce8e8);
+    color: var(--slds-g-color-neutral-base-10, #181818);
+    text-decoration: none;
+}
+
+.app-launcher-dropdown .slds-dropdown__item[aria-current="page"] > a,
+.app-launcher-dropdown .slds-dropdown__item[aria-current="true"] > a,
+.app-launcher-dropdown .slds-dropdown__item.slds-is-selected > a,
+.app-launcher-dropdown .slds-dropdown__item.slds-is-active > a {
+    background-color: var(--slds-g-color-accent-2, #a30000);
+    color: var(--slds-g-color-on-accent-1, #ffffff);
+}
+
+.app-launcher-dropdown .slds-dropdown__item[aria-current="page"] > a:hover,
+.app-launcher-dropdown .slds-dropdown__item[aria-current="page"] > a:focus,
+.app-launcher-dropdown .slds-dropdown__item[aria-current="true"] > a:hover,
+.app-launcher-dropdown .slds-dropdown__item[aria-current="true"] > a:focus,
+.app-launcher-dropdown .slds-dropdown__item.slds-is-selected > a:hover,
+.app-launcher-dropdown .slds-dropdown__item.slds-is-selected > a:focus {
+    background-color: var(--slds-g-color-accent-3, #7a0000);
+    color: var(--slds-g-color-on-accent-1, #ffffff);
+}
