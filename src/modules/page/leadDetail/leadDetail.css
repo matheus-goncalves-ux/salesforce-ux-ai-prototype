@@ -16,6 +16,24 @@
     display: block;
 }
 
+/* ---------- Path bar alignment ----------
+ * The SLDS Path markup is manual (we don't use <lightning-path>). The
+ * outer `.slds-grid` defaults to align-items: stretch, which makes the
+ * `.slds-path__action` wrapper grow to match the track height — and any
+ * vertical padding on that wrapper pushes the brand button off-center
+ * relative to the path stages. Center the action vertically against the
+ * track and give it a small horizontal gap instead of all-around padding. */
+
+.c-lead-path .slds-path > .slds-grid {
+    align-items: center;
+}
+
+.c-lead-path__action {
+    display: inline-flex;
+    align-items: center;
+    margin-inline-start: var(--slds-g-spacing-2, 0.5rem);
+}
+
 /* ---------- Outer shell that unifies tabs + related-list cards ----------
  * Matches the Figma spec where the `lightning-tabset` and the related-list
  * cards live inside a single rounded white container with uniform inner
