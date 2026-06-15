@@ -1,0 +1,415 @@
+/*
+ * Order Detail page styles.
+ *
+ * Mirrors the campaignDetail / leadDetail layout: a 6-step delivery
+ * path above an 8/12 left column hosting the Related / Details tabset
+ * (with stacked bordered cards inside Related and collapsible field
+ * sections inside Details) and a 4/12 right rail with the Activity
+ * feed and the Alerts list.
+ *
+ * The page uses a small set of custom `c-order-detail__*` classes for
+ * card chrome, the address/map blocks, the inline-edit pencils, and
+ * the Alerts list. All themable values flow through SLDS styling hooks
+ * with literal fallbacks for SLDS 1 contexts. No `!important`, no raw
+ * inline `style` attributes, no `.slds-*` overrides.
+ */
+
+:host {
+    display: block;
+}
+
+/* ---------- Path bar alignment ---------- */
+
+/* The SLDS Path markup is manual (we don't use <lightning-path>). The
+   outer `.slds-grid` defaults to align-items: stretch, which makes the
+   `.slds-path__action` wrapper grow to match the track height — and any
+   vertical padding on that wrapper pushes the brand button off-center
+   relative to the path stages. Centre the action vertically and add a
+   small inline gap so it sits flush with the track. */
+.c-order-detail__path .slds-path > .slds-grid {
+    align-items: center;
+}
+
+.c-order-detail__path-action {
+    display: inline-flex;
+    align-items: center;
+    margin-inline-start: var(--slds-g-spacing-2, 0.5rem);
+}
+
+/* ---------- Outer shell that unifies tabs + related-list cards ----------
+ * Matches the campaign/lead detail pattern: a single rounded white
+ * container holds the `lightning-tabset`, and each card (Order Products,
+ * Order History, Notes & Attachments) is a bordered card stacked inside
+ * the active tab. */
+
+.c-order-detail__shell {
+    background-color: var(--slds-g-color-surface-container-1, #ffffff);
+    border-radius: var(--slds-g-radius-border-4, 1rem);
+    padding: var(--slds-g-spacing-3, 0.75rem);
+}
+
+.c-order-detail__tabset {
+    --slds-c-tabs-item-color-border-active: var(--slds-g-color-accent-2, #0079ce);
+    --slds-c-tabs-item-text-color-active: var(--slds-g-color-accent-2, #0079ce);
+    --slds-c-tabs-item-text-color-hover: var(--slds-g-color-accent-2, #0079ce);
+}
+
+.c-order-detail__shell .c-order-detail__card + .c-order-detail__card {
+    margin-top: var(--slds-g-spacing-3, 0.75rem);
+}
+
+/* ---------- Card chrome (shared by every related-list and the Alerts card) ---------- */
+
+.c-order-detail__card {
+    background-color: var(--slds-g-color-surface-container-1, #ffffff);
+    border: var(--slds-g-sizing-border-1, 1px) solid var(--slds-g-color-border-1, #c9c9c9);
+    border-radius: var(--slds-g-radius-border-3, 0.75rem);
+    overflow: hidden;
+}
+
+.c-order-detail__card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--slds-g-spacing-3, 0.75rem);
+    padding: var(--slds-g-spacing-3, 0.75rem) var(--slds-g-spacing-4, 1rem);
+    border-block-end: var(--slds-g-sizing-border-1, 1px) solid var(--slds-g-color-border-1, #c9c9c9);
+}
+
+.c-order-detail__card-title {
+    display: flex;
+    align-items: center;
+    gap: var(--slds-g-spacing-2, 0.5rem);
+    min-width: 0;
+}
+
+.c-order-detail__card-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--slds-g-sizing-8, 1.75rem);
+    height: var(--slds-g-sizing-8, 1.75rem);
+    border-radius: var(--slds-g-radius-border-circle, 9999px);
+    background-color: var(--slds-g-color-accent-container-1, #eef4ff);
+    flex-shrink: 0;
+}
+
+.c-order-detail__card-icon_muted {
+    background-color: var(--slds-g-color-surface-container-2, #f3f3f3);
+}
+
+.c-order-detail__card-icon_warning {
+    background-color: var(--slds-g-color-warning-container-1, #fef0c3);
+}
+
+.c-order-detail__card-heading {
+    margin: 0;
+    font-size: var(--slds-g-font-scale-2, 0.8125rem);
+    font-weight: 590;
+    color: var(--slds-g-color-on-surface-2, #2e2e2e);
+    line-height: var(--slds-g-font-lineheight-2, 1.25);
+}
+
+.c-order-detail__card-heading a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.c-order-detail__card-heading a:hover,
+.c-order-detail__card-heading a:focus {
+    text-decoration: underline;
+}
+
+.c-order-detail__card-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--slds-g-spacing-2, 0.5rem);
+    flex-shrink: 0;
+}
+
+/* ---------- Card footer (centered View All) ---------- */
+
+.c-order-detail__card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-block: var(--slds-g-spacing-2, 0.5rem);
+    border-block-start: var(--slds-g-sizing-border-1, 1px) solid var(--slds-g-color-border-1, #c9c9c9);
+    background-color: var(--slds-g-color-surface-container-1, #ffffff);
+}
+
+.c-order-detail__card-footer a {
+    font-size: var(--slds-g-font-scale-2, 0.8125rem);
+    font-weight: 590;
+    color: var(--slds-g-color-accent-2, #0079ce);
+    text-decoration: none;
+}
+
+.c-order-detail__card-footer a:hover,
+.c-order-detail__card-footer a:focus {
+    text-decoration: underline;
+}
+
+/* ---------- Related-list tables ---------- */
+
+.c-order-detail__table-wrap {
+    overflow-x: auto;
+}
+
+.c-order-detail__table th,
+.c-order-detail__table td {
+    font-size: var(--slds-g-font-scale-2, 0.8125rem);
+}
+
+.c-order-detail__row-actions-col {
+    width: 2.5rem;
+}
+
+.c-order-detail__row-actions-cell {
+    text-align: end;
+    white-space: nowrap;
+}
+
+/* ---------- Empty-state copy inside a card body ---------- */
+
+.c-order-detail__empty {
+    margin: 0;
+    padding: var(--slds-g-spacing-4, 1rem);
+    font-size: var(--slds-g-font-scale-1, 0.875rem);
+    color: var(--slds-g-color-on-surface-1, #5c5c5c);
+    text-align: center;
+}
+
+/* ---------- Notes & Attachments dropzone ---------- */
+
+.c-order-detail__file-drop {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--slds-g-spacing-2, 0.5rem);
+    margin: var(--slds-g-spacing-4, 1rem);
+    padding: var(--slds-g-spacing-5, 1.5rem);
+    border: var(--slds-g-sizing-border-1, 1px) dashed var(--slds-g-color-border-1, #c9c9c9);
+    border-radius: var(--slds-g-radius-border-3, 0.75rem);
+    background-color: var(--slds-g-color-surface-container-2, #f3f3f3);
+    text-align: center;
+}
+
+.c-order-detail__file-helper {
+    margin: 0;
+    font-size: var(--slds-g-font-scale-1, 0.875rem);
+    color: var(--slds-g-color-on-surface-1, #5c5c5c);
+}
+
+.c-order-detail__file-button {
+    margin-block: var(--slds-g-spacing-1, 0.25rem);
+}
+
+.c-order-detail__file-hint {
+    margin: 0;
+    font-size: var(--slds-g-font-scale-neg-1, 0.75rem);
+    color: var(--slds-g-color-on-surface-1, #5c5c5c);
+}
+
+/* ---------- Details tab ---------- */
+
+.c-order-detail__details-body {
+    padding: var(--slds-g-spacing-4, 1rem);
+    display: flex;
+    flex-direction: column;
+    gap: var(--slds-g-spacing-4, 1rem);
+}
+
+.c-order-detail__section-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--slds-g-spacing-3, 0.75rem);
+    margin-top: var(--slds-g-spacing-2, 0.5rem);
+    margin-bottom: var(--slds-g-spacing-2, 0.5rem);
+}
+
+/* Each cell wraps a single read-only field plus an optional inline-edit
+   pencil aligned to the field's top-right corner. */
+.c-order-detail__field {
+    position: relative;
+}
+
+.c-order-detail__field_full {
+    grid-column: 1 / -1;
+}
+
+.c-order-detail__inline-edit {
+    color: var(--slds-g-color-on-surface-1, #5c5c5c);
+}
+
+.c-order-detail__inline-edit:hover,
+.c-order-detail__inline-edit:focus {
+    color: var(--slds-g-color-accent-2, #0079ce);
+}
+
+.c-order-detail__inline-edit_field {
+    position: absolute;
+    top: 0;
+    inset-inline-end: 0;
+}
+
+/* ---------- Address section (Billing + Shipping with map preview) ---------- */
+
+.c-order-detail__address-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--slds-g-spacing-4, 1rem);
+    margin-top: var(--slds-g-spacing-2, 0.5rem);
+    margin-bottom: var(--slds-g-spacing-2, 0.5rem);
+}
+
+.c-order-detail__address-block {
+    display: flex;
+    flex-direction: column;
+    gap: var(--slds-g-spacing-1, 0.25rem);
+    padding: var(--slds-g-spacing-3, 0.75rem);
+    border: var(--slds-g-sizing-border-1, 1px) solid var(--slds-g-color-border-1, #c9c9c9);
+    border-radius: var(--slds-g-radius-border-3, 0.75rem);
+    background-color: var(--slds-g-color-surface-container-1, #ffffff);
+}
+
+.c-order-detail__address-label-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--slds-g-spacing-2, 0.5rem);
+}
+
+.c-order-detail__address-label {
+    font-size: var(--slds-g-font-scale-neg-1, 0.75rem);
+    font-weight: 590;
+    color: var(--slds-g-color-on-surface-1, #5c5c5c);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.c-order-detail__address-text {
+    margin: 0;
+    font-size: var(--slds-g-font-scale-1, 0.875rem);
+    color: var(--slds-g-color-on-surface-2, #2e2e2e);
+    line-height: var(--slds-g-font-lineheight-2, 1.25);
+}
+
+/* Small linked map preview rendered as a subtle gradient tile with a
+   centred pin icon. We don't embed a third-party tile service so the
+   preview is purely cosmetic for the prototype. */
+.c-order-detail__map {
+    display: flex;
+    flex-direction: column;
+    gap: var(--slds-g-spacing-1, 0.25rem);
+    margin-top: var(--slds-g-spacing-2, 0.5rem);
+    text-decoration: none;
+    color: var(--slds-g-color-accent-2, #0079ce);
+    font-size: var(--slds-g-font-scale-neg-1, 0.75rem);
+    font-weight: 590;
+}
+
+.c-order-detail__map:hover .c-order-detail__map-preview,
+.c-order-detail__map:focus .c-order-detail__map-preview {
+    border-color: var(--slds-g-color-accent-2, #0079ce);
+}
+
+.c-order-detail__map-preview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: var(--slds-g-sizing-12, 6rem);
+    border: var(--slds-g-sizing-border-1, 1px) solid var(--slds-g-color-border-1, #c9c9c9);
+    border-radius: var(--slds-g-radius-border-2, 0.5rem);
+    background-color: var(--slds-g-color-surface-container-2, #f3f3f3);
+    background-image:
+        linear-gradient(135deg, rgba(0, 121, 206, 0.08) 0%, rgba(0, 121, 206, 0) 60%),
+        repeating-linear-gradient(0deg, rgba(80, 80, 80, 0.05) 0 1px, transparent 1px 16px),
+        repeating-linear-gradient(90deg, rgba(80, 80, 80, 0.05) 0 1px, transparent 1px 16px);
+}
+
+.c-order-detail__map-preview_shipping {
+    background-image:
+        linear-gradient(135deg, rgba(45, 132, 84, 0.1) 0%, rgba(45, 132, 84, 0) 60%),
+        repeating-linear-gradient(0deg, rgba(80, 80, 80, 0.05) 0 1px, transparent 1px 16px),
+        repeating-linear-gradient(90deg, rgba(80, 80, 80, 0.05) 0 1px, transparent 1px 16px);
+}
+
+.c-order-detail__map-caption {
+    align-self: flex-end;
+}
+
+/* ---------- Alerts list ----------
+ * Compact, single-line accordion-style rows matching the SLDS Card
+ * "Alerts" pattern: each row is `chevron · warning-icon · message · row-menu`,
+ * separated by a hairline border. The message uses the accent link color,
+ * truncates with ellipsis, and the row-menu is a small bordered button-icon
+ * (lightning-button-menu with variant="border-filled").
+ */
+
+.c-order-detail__alerts-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.c-order-detail__alert-item {
+    display: grid;
+    grid-template-columns: auto auto 1fr auto;
+    align-items: center;
+    gap: var(--slds-g-spacing-2, 0.5rem);
+    padding: var(--slds-g-spacing-2, 0.5rem) var(--slds-g-spacing-4, 1rem);
+    border-block-end: var(--slds-g-sizing-border-1, 1px) solid var(--slds-g-color-border-1, #c9c9c9);
+}
+
+.c-order-detail__alert-item:last-child {
+    border-block-end: 0;
+}
+
+/* Collapsed-state chevron indicator. Flat, no background — purely a
+   visual affordance that the row could expand. */
+.c-order-detail__alert-chevron {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--slds-g-color-on-surface-1, #5c5c5c);
+    flex-shrink: 0;
+}
+
+/* Flat warning icon (no circular background). The `variant="warning"`
+   on the inner `<lightning-icon>` colors the glyph. */
+.c-order-detail__alert-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.c-order-detail__alert-text {
+    margin: 0;
+    font-size: var(--slds-g-font-scale-1, 0.875rem);
+    color: var(--slds-g-color-accent-2, #0079ce);
+    line-height: var(--slds-g-font-lineheight-2, 1.25);
+    min-width: 0;
+}
+
+.c-order-detail__alert-actions {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+/* ---------- Responsive: collapse Details + addresses on narrow viewports ---------- */
+
+@media (max-width: 48rem) {
+    .c-order-detail__section-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .c-order-detail__address-grid {
+        grid-template-columns: 1fr;
+    }
+}

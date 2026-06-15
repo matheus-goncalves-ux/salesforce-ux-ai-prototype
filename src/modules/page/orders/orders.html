@@ -1,0 +1,78 @@
+<template>
+    <div class="slds-p-horizontal_medium">
+        <ui-page-header
+            variant="object-home"
+            icon-name="standard:orders"
+            object-label="Orders"
+            title="All Orders"
+            meta-text={metaText}
+            onsearch={handleSearch}>
+            <lightning-button-icon
+                slot="switcher"
+                icon-name="utility:down"
+                variant="bare"
+                size="small"
+                alternative-text="Switch list view"
+                title="Switch list view">
+            </lightning-button-icon>
+            <div slot="actions">
+                <div class="slds-page-header__controls">
+                    <div class="slds-page-header__control">
+                        <lightning-button-group>
+                            <lightning-button label="New" variant="brand"></lightning-button>
+                            <lightning-button label="Import" variant="neutral"></lightning-button>
+                            <lightning-button label="Activate" variant="neutral"></lightning-button>
+                            <lightning-button label="Export" variant="neutral"></lightning-button>
+                        </lightning-button-group>
+                    </div>
+                    <div class="slds-page-header__control">
+                        <lightning-button-menu
+                            alternative-text="More Actions"
+                            variant="border-filled"
+                            icon-size="medium"
+                            menu-alignment="right">
+                            <lightning-menu-item label="Printable View" value="printable"></lightning-menu-item>
+                            <lightning-menu-item label="Refresh" value="refresh"></lightning-menu-item>
+                            <lightning-menu-item label="Edit List View" value="edit_list"></lightning-menu-item>
+                        </lightning-button-menu>
+                    </div>
+                </div>
+            </div>
+        </ui-page-header>
+
+        <!-- Filter bar: status and type filters above the table. -->
+        <div class="c-orders__filter-bar slds-grid slds-gutters_x-small slds-wrap slds-m-vertical_small">
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12">
+                <lightning-combobox
+                    label="Filter by Status"
+                    variant="label-hidden"
+                    placeholder="Filter by Status"
+                    value={statusFilter}
+                    options={statusFilterOptions}
+                    onchange={handleStatusFilterChange}>
+                </lightning-combobox>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12">
+                <lightning-combobox
+                    label="Filter by Type"
+                    variant="label-hidden"
+                    placeholder="Filter by Type"
+                    value={typeFilter}
+                    options={typeFilterOptions}
+                    onchange={handleTypeFilterChange}>
+                </lightning-combobox>
+            </div>
+        </div>
+
+        <lightning-datatable
+            key-field="id"
+            data={filteredData}
+            columns={columns}
+            sorted-by={sortedBy}
+            sorted-direction={sortedDirection}
+            onsort={handleSort}
+            onrowaction={handleRowAction}
+            show-row-number-column>
+        </lightning-datatable>
+    </div>
+</template>

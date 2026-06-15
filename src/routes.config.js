@@ -67,6 +67,19 @@ export const routes = [
     navHighlight: 'campaigns',
   },
   {
+    path: '/orders',
+    component: 'page-orders',
+    title: 'Orders',
+    navPage: 'orders',
+    navLabel: 'Orders',
+  },
+  {
+    path: '/orders/:id',
+    component: 'page-order-detail',
+    title: (params) => `Order ${params.id}`,
+    navHighlight: 'orders',
+  },
+  {
     path: '/',
     component: 'page-builder',
     title: 'Builder',

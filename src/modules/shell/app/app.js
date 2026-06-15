@@ -17,6 +17,8 @@ import Leads from 'page/leads';
 import LeadDetail from 'page/leadDetail';
 import Campaigns from 'page/campaigns';
 import CampaignDetail from 'page/campaignDetail';
+import Orders from 'page/orders';
+import OrderDetail from 'page/orderDetail';
 import Builder from 'page/builder';
 import NotFound from 'page/notFound';
 
@@ -30,6 +32,8 @@ const ROUTE_COMPONENTS = {
     'page-lead-detail': LeadDetail,
     'page-campaigns': Campaigns,
     'page-campaign-detail': CampaignDetail,
+    'page-orders': Orders,
+    'page-order-detail': OrderDetail,
     'page-builder': Builder,
 };
 
